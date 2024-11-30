@@ -5,6 +5,7 @@ plugins {
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.detekt)
+  kotlin(libs.plugins.kotlin.seriazation.get().pluginId) version libs.plugins.kotlin.seriazation.get().version.requiredVersion
 }
 
 android {
@@ -43,10 +44,14 @@ dependencies {
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
+  implementation(libs.androidx.navigation.compose)
+  implementation(libs.kotlinx.serialization)
 
   implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.foundation)
+  debugImplementation(libs.androidx.compose.ui.tooling.prview)
+  debugImplementation(libs.androidx.compose.ui.tooling)
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
