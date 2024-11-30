@@ -24,8 +24,13 @@ android {
   }
 
   buildTypes {
+    debug {
+      applicationIdSuffix = ".debug"
+      isDebuggable = true
+    }
     release {
       isMinifyEnabled = true
+      applicationIdSuffix = ".release"
       proguardFiles(
         getDefaultProguardFile("proguard-android-optimize.txt"),
         "proguard-rules.pro"
@@ -38,6 +43,9 @@ android {
   }
   kotlinOptions {
     jvmTarget = "17"
+  }
+  buildFeatures {
+    buildConfig = true
   }
 }
 
