@@ -5,6 +5,9 @@ plugins {
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.detekt)
+  alias(libs.plugins.ksp)
+  alias(libs.plugins.hilt)
+
   kotlin(libs.plugins.kotlin.seriazation.get().pluginId) version libs.plugins.kotlin.seriazation.get().version.requiredVersion
 }
 
@@ -46,6 +49,10 @@ dependencies {
   implementation(libs.material)
   implementation(libs.androidx.navigation.compose)
   implementation(libs.kotlinx.serialization)
+
+  implementation(libs.dagger.hilt.android)
+  testImplementation(libs.dagger.hilt.android.testing)
+  ksp(libs.dagger.hilt.compiler)
 
   implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.compose.material3)
