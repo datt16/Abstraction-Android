@@ -11,6 +11,11 @@ naming:
     active: true
     ignoreAnnotated: ['Composable']
 
+style:
+  UnusedPrivateMember:
+    active: true
+    allowedNames: '.*Preview|test.*|.*Test'
+
 config:
   validation: true
   warningsAsErrors: false
