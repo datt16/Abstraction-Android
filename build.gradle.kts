@@ -4,3 +4,11 @@ plugins {
   alias(libs.plugins.kotlin.android) apply false
   alias(libs.plugins.compose.compiler) apply false
 }
+
+tasks.register("lintFormat") {
+  group = "verification"
+  description = "Run detekt for all subprojects"
+  dependsOn(
+    subprojects.mapNotNull { it.tasks.findByName("detekt") }
+  )
+}
