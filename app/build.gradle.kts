@@ -61,6 +61,7 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.tooling)
 
   testImplementation(libs.junit)
+  implementation(libs.timber)
   androidTestImplementation(libs.androidx.junit)
   detektPlugins(libs.detekt.formatting)
   detektPlugins(libs.detekt.compose.rules)
