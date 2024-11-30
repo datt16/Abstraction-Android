@@ -6,4 +6,3 @@ import androidx.compose.ui.text.font.FontWeight
 fun TextStyle.black() = copy(fontWeight = FontWeight.Black)
 fun TextStyle.bold() = copy(fontWeight = FontWeight.Bold)
 fun TextStyle.thin() = copy(fontWeight = FontWeight.Thin)
-

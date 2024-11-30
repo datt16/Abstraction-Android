@@ -8,14 +8,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 
-
 val LocalAppColors = compositionLocalOf { LightColorScheme }
 val LocalAppTypography = compositionLocalOf { Typography() }
 
 @Composable
 fun AbstractionAppTheme(
     darkTheme: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     CompositionLocalProvider(
