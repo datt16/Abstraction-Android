@@ -26,3 +26,5 @@ formatting:
   autoCorrect: true
   TrailingCommaOnDeclarationSite:
     active: true
+  Indentation:
+    indentSize: 2

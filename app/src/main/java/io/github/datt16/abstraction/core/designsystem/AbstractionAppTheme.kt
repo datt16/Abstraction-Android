@@ -13,30 +13,30 @@ val LocalAppTypography = compositionLocalOf { Typography() }
 
 @Composable
 fun AbstractionAppTheme(
-    darkTheme: Boolean = false,
-    content: @Composable () -> Unit,
+  darkTheme: Boolean = false,
+  content: @Composable () -> Unit,
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
-    CompositionLocalProvider(
-        LocalAppColors provides colorScheme,
-        LocalAppTypography provides Typography(),
-    ) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography(),
-            content = content
-        )
-    }
+  val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+  CompositionLocalProvider(
+    LocalAppColors provides colorScheme,
+    LocalAppTypography provides Typography(),
+  ) {
+    MaterialTheme(
+      colorScheme = colorScheme,
+      typography = Typography(),
+      content = content
+    )
+  }
 }
 
 object AbstractionAppTheme {
-    val colors: ColorScheme
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalAppColors.current
+  val colors: ColorScheme
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalAppColors.current
 
-    val typography: Typography
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalAppTypography.current
+  val typography: Typography
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalAppTypography.current
 }

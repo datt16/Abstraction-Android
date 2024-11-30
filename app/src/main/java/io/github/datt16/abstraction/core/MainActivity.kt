@@ -9,15 +9,15 @@ import io.github.datt16.abstraction.core.ext.black
 
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AbstractionAppTheme {
-                Text(
-                    text = "Hello, World!",
-                    style = AbstractionAppTheme.typography.bodyLarge.black()
-                )
-            }
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      AbstractionAppTheme {
+        Text(
+          text = "Hello, World!",
+          style = AbstractionAppTheme.typography.bodyLarge.black()
+        )
+      }
     }
+  }
 }
