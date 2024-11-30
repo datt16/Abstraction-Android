@@ -48,7 +48,9 @@ dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
   implementation(libs.androidx.navigation.compose)
+  implementation(libs.androidx.hilt.navigation.compose)
   implementation(libs.kotlinx.serialization)
+  implementation(libs.kotlinx.coroutines)
 
   implementation(libs.dagger.hilt.android)
   testImplementation(libs.dagger.hilt.android.testing)
