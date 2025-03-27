@@ -4,7 +4,7 @@ Androidアプリ開発のテンプレートです。通信系の仕組みやCI/C
 
 ## 構成
 - Kotlin
-  - 2.0.21 
+  - 2.1.10 
 - UI
   - Jetpack Compose
   - Material3
