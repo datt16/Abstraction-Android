@@ -1,19 +1,18 @@
 [versions]
-agp = "8.7.2"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+agp = "8.7.3"
+kotlin = "2.1.10"
+ksp = "2.1.10-1.0.29"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-composeBom = "2024.11.00"
-activity = "1.9.3"
+composeBom = "2025.03.01"
+activity = "1.10.1"
 detekt = "1.23.7"
-navigation = "2.8.4"
+navigation = "2.8.9"
 kotlinx-serialization = "1.7.3"
-kotlinx-coroutines = "1.9.0"
+kotlinx-coroutines = "1.10.1"
 hilt = "2.52"
 hilt-navigation-compose = "1.2.0"
 timber = "5.0.1"
@@ -24,7 +23,6 @@ androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", ve
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
