@@ -50,7 +50,7 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Build Release APK
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/')
         run: ./gradlew assembleRelease
 
       - name: Upload Debug APK
@@ -60,7 +60,7 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
 
       - name: Upload Release APK
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
           name: release-apk-${{ github.sha }}
