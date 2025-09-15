@@ -10,10 +10,17 @@ concurrency:
   group: build-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
+    outputs:
+      build-status: ${{ steps.build-status.outputs.status }}
 
     steps:
       - name: Checkout code
@@ -31,18 +38,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-
-      - name: Run unit tests
-        run: ./gradlew test
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ github.sha }}
-          path: |
-            app/build/test-results/
-            app/build/reports/tests/
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
@@ -64,41 +59,10 @@ jobs:
           name: release-apk-${{ github.sha }}
           path: app/build/outputs/apk/release/*.apk
 
-      - name: Comment PR with build status
-        if: github.event_name == 'pull_request' && always()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const outcome = '${{ job.status }}';
-            const prNumber = context.issue.number;
-
-            let message = '## 🏗️ Build & Test Report\n\n';
-
-            if (outcome === 'success') {
-              message += '✅ **Build Status**: Success\n\n';
-              message += '### 📦 Artifacts\n';
-              message += '- Debug APK available in artifacts\n';
-              message += '- Test reports available in artifacts\n\n';
-
-              const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-              message += `### 📥 Download\n`;
-              message += `[Download APK and test results from workflow artifacts](${runUrl})\n`;
-            } else if (outcome === 'failure') {
-              message += '❌ **Build Status**: Failed\n\n';
-              message += 'Please check the workflow logs for details.\n';
-            } else {
-              message += '⚠️ **Build Status**: ' + outcome + '\n';
-            }
-
-            message += '\n---\n';
-            message += `🔗 [View Workflow Run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
-
-            github.rest.issues.createComment({
-              issue_number: prNumber,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
-            });
+      - name: Set build status output
+        id: build-status
+        if: always()
+        run: echo "status=${{ job.status }}" >> $GITHUB_OUTPUT
 
       - name: Generate build report
         if: github.ref == 'refs/heads/main'
@@ -130,13 +94,174 @@ jobs:
           name: build-report-${{ github.sha }}
           path: build-report.md
 
+  test:
+    needs: build
+    if: needs.build.outputs.build-status == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Run unit tests
+        run: ./gradlew test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.sha }}
+          path: |
+            app/build/test-results/
+            app/build/reports/tests/
+
+  detekt:
+    needs: build
+    if: needs.build.outputs.build-status == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Run detekt
+        run: ./gradlew detekt --continue
+
+      - name: Upload detekt reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-reports-${{ github.sha }}
+          path: |
+            app/build/reports/detekt/
+            build/reports/detekt/
+
+  report:
+    needs: [build, test, detekt]
+    if: always() && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Comment PR with CI status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const buildStatus = '${{ needs.build.result }}';
+            const testStatus = '${{ needs.test.result }}';
+            const detektStatus = '${{ needs.detekt.result }}';
+            const prNumber = context.issue.number;
+
+            let message = '## 🤖 CI Report\n\n';
+
+            // Build status
+            message += '### Build\n';
+            if (buildStatus === 'success') {
+              message += '✅ Build completed successfully\n';
+            } else if (buildStatus === 'failure') {
+              message += '❌ Build failed\n';
+            } else if (buildStatus === 'skipped') {
+              message += '⏭️ Build was skipped\n';
+            } else {
+              message += '⚠️ Build status: ' + buildStatus + '\n';
+            }
+
+            // Test status
+            message += '\n### Tests\n';
+            if (testStatus === 'success') {
+              message += '✅ All tests passed\n';
+            } else if (testStatus === 'failure') {
+              message += '❌ Tests failed\n';
+            } else if (testStatus === 'skipped') {
+              message += '⏭️ Tests were skipped (build failed)\n';
+            } else {
+              message += '⚠️ Test status: ' + testStatus + '\n';
+            }
+
+            // Detekt status
+            message += '\n### Code Quality (Detekt)\n';
+            if (detektStatus === 'success') {
+              message += '✅ Code quality check passed\n';
+            } else if (detektStatus === 'failure') {
+              message += '❌ Code quality issues found\n';
+            } else if (detektStatus === 'skipped') {
+              message += '⏭️ Detekt was skipped (build failed)\n';
+            } else {
+              message += '⚠️ Detekt status: ' + detektStatus + '\n';
+            }
+
+            if (buildStatus === 'success') {
+              message += '\n### 📦 Artifacts\n';
+              message += '- Debug APK available in artifacts\n';
+
+              if (testStatus === 'success' || testStatus === 'failure') {
+                message += '- Test reports available in artifacts\n';
+              }
+
+              if (detektStatus === 'success' || detektStatus === 'failure') {
+                message += '- Detekt reports available in artifacts\n';
+              }
+            }
+
+            message += '\n---\n';
+            message += `🔗 [View Workflow Run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
+  release:
+    needs: [build, test]
+    if: startsWith(github.ref, 'refs/tags/v') && needs.build.result == 'success' && needs.test.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download APKs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*-apk-*'
+          merge-multiple: true
+
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            app/build/outputs/apk/debug/*.apk
-            app/build/outputs/apk/release/*.apk
+            *.apk
           generate_release_notes: true
           draft: false
           prerelease: false
