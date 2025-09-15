@@ -1,0 +1,112 @@
+name: CI - Main Branch
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Run detekt with auto-correct
+        run: ./gradlew detekt --continue
+
+      - name: Upload detekt reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-reports
+          path: |
+            app/build/reports/detekt/
+            build/reports/detekt/
+
+      - name: Run unit tests
+        run: ./gradlew test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            app/build/test-results/
+            app/build/reports/tests/
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: app/build/outputs/apk/release/*.apk
+
+      - name: Generate build report
+        if: always()
+        run: |
+          echo "# Build Report" > build-report.md
+          echo "" >> build-report.md
+          echo "## Build Information" >> build-report.md
+          echo "- **Branch**: ${{ github.ref_name }}" >> build-report.md
+          echo "- **Commit**: ${{ github.sha }}" >> build-report.md
+          echo "- **Author**: ${{ github.actor }}" >> build-report.md
+          echo "- **Time**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> build-report.md
+          echo "" >> build-report.md
+
+          if [ -f app/build/outputs/apk/debug/*.apk ]; then
+            echo "## APK Details" >> build-report.md
+            echo "### Debug APK" >> build-report.md
+            ls -lh app/build/outputs/apk/debug/*.apk | awk '{print "- Size: " $5}' >> build-report.md
+          fi
+
+          if [ -f app/build/outputs/apk/release/*.apk ]; then
+            echo "### Release APK" >> build-report.md
+            ls -lh app/build/outputs/apk/release/*.apk | awk '{print "- Size: " $5}' >> build-report.md
+          fi
+
+      - name: Upload build report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report
+          path: build-report.md
+
+      - name: Create Release (if tagged)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/release/*.apk
+          generate_release_notes: true
+          draft: false
+          prerelease: false
