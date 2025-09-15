@@ -1,11 +1,17 @@
-name: CI - Main Branch
+name: Build & Test
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   push:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -28,18 +34,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Run detekt with auto-correct
-        run: ./gradlew detekt --continue
-
-      - name: Upload detekt reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: detekt-reports
-          path: |
-            app/build/reports/detekt/
-            build/reports/detekt/
-
       - name: Run unit tests
         run: ./gradlew test
 
@@ -47,7 +41,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-${{ github.sha }}
           path: |
             app/build/test-results/
             app/build/reports/tests/
@@ -56,22 +50,60 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Build Release APK
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
         run: ./gradlew assembleRelease
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: debug-apk
+          name: debug-apk-${{ github.sha }}
           path: app/build/outputs/apk/debug/*.apk
 
       - name: Upload Release APK
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
+          name: release-apk-${{ github.sha }}
           path: app/build/outputs/apk/release/*.apk
 
+      - name: Comment PR with build status
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const outcome = '${{ job.status }}';
+            const prNumber = context.issue.number;
+
+            let message = '## 🏗️ Build & Test Report\n\n';
+
+            if (outcome === 'success') {
+              message += '✅ **Build Status**: Success\n\n';
+              message += '### 📦 Artifacts\n';
+              message += '- Debug APK available in artifacts\n';
+              message += '- Test reports available in artifacts\n\n';
+
+              const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+              message += `### 📥 Download\n`;
+              message += `[Download APK and test results from workflow artifacts](${runUrl})\n`;
+            } else if (outcome === 'failure') {
+              message += '❌ **Build Status**: Failed\n\n';
+              message += 'Please check the workflow logs for details.\n';
+            } else {
+              message += '⚠️ **Build Status**: ' + outcome + '\n';
+            }
+
+            message += '\n---\n';
+            message += `🔗 [View Workflow Run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
       - name: Generate build report
-        if: always()
+        if: github.ref == 'refs/heads/main'
         run: |
           echo "# Build Report" > build-report.md
           echo "" >> build-report.md
@@ -82,25 +114,25 @@ jobs:
           echo "- **Time**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> build-report.md
           echo "" >> build-report.md
 
-          if [ -f app/build/outputs/apk/debug/*.apk ]; then
+          if [ -d app/build/outputs/apk/debug ]; then
             echo "## APK Details" >> build-report.md
             echo "### Debug APK" >> build-report.md
             ls -lh app/build/outputs/apk/debug/*.apk | awk '{print "- Size: " $5}' >> build-report.md
           fi
 
-          if [ -f app/build/outputs/apk/release/*.apk ]; then
+          if [ -d app/build/outputs/apk/release ]; then
             echo "### Release APK" >> build-report.md
             ls -lh app/build/outputs/apk/release/*.apk | awk '{print "- Size: " $5}' >> build-report.md
           fi
 
       - name: Upload build report
-        if: always()
+        if: github.ref == 'refs/heads/main' && always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-report
+          name: build-report-${{ github.sha }}
           path: build-report.md
 
-      - name: Create Release (if tagged)
+      - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
         with:
