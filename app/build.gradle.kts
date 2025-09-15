@@ -1,4 +1,5 @@
 import com.android.sdklib.AndroidVersion.VersionCodes
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   alias(libs.plugins.android.application)
@@ -37,12 +38,17 @@ android {
       )
     }
   }
+  buildFeatures {
+    buildConfig = true
+  }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
   }
-  buildFeatures {
-    buildConfig = true
+  kotlin {
+    compilerOptions {
+      jvmTarget = JvmTarget.JVM_21
+    }
   }
 }
 
