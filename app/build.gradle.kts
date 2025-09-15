@@ -13,13 +13,13 @@ plugins {
 
 android {
   namespace = "io.github.datt16.abstraction"
-  compileSdk = VersionCodes.VANILLA_ICE_CREAM
+  compileSdk = VersionCodes.BAKLAVA
 
   defaultConfig {
     applicationId = "io.github.datt16.abstraction"
     minSdk = VersionCodes.Q
-    targetSdk = VersionCodes.VANILLA_ICE_CREAM
-    versionCode = 29350001
+    targetSdk = VersionCodes.BAKLAVA
+    versionCode = 29360001
     versionName = "0.1"
   }
 
@@ -38,11 +38,8 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-  }
-  kotlinOptions {
-    jvmTarget = "17"
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
   }
   buildFeatures {
     buildConfig = true
