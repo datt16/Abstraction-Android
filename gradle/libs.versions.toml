@@ -47,13 +47,29 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-compose-rules = { group = "io.nlopez.compose.rules", name = "detekt", version = "0.4.19" }
 
+# Build-logic dependencies
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version = "31.7.2" }
+compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-kotlin-seriazation = { id = "plugin.serialization", version.ref = "kotlin" }
+kotlin-seriazation = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+# Convention plugins - these are implemented in build-logic
+abstraction-android-application = { id = "abstraction.android.application", version = "unspecified" }
+abstraction-android-application-compose = { id = "abstraction.android.application.compose", version = "unspecified" }
+abstraction-android-library = { id = "abstraction.android.library", version = "unspecified" }
+abstraction-android-library-compose = { id = "abstraction.android.library.compose", version = "unspecified" }
+abstraction-android-hilt = { id = "abstraction.android.hilt", version = "unspecified" }
+abstraction-detekt = { id = "abstraction.detekt", version = "unspecified" }
 
