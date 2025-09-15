@@ -7,7 +7,7 @@ object AndroidBuildConfig {
     const val MIN_SDK = 29
     const val TARGET_SDK = 36
 
-    val JAVA_VERSION = JavaVersion.VERSION_17
+    val JAVA_VERSION = JavaVersion.VERSION_21
 
     const val APPLICATION_ID = "io.github.datt16.abstraction"
     const val VERSION_NAME = "1.0"

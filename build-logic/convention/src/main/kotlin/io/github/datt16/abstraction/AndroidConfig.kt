@@ -37,7 +37,7 @@ internal fun Project.configureKotlinAndroid(
 internal fun Project.configureKotlin() {
     extensions.getByType<KotlinAndroidProjectExtension>().apply {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_21)
             freeCompilerArgs.addAll(
                 listOf(
                     "-opt-in=kotlin.RequiresOptIn",
