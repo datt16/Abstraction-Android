@@ -31,6 +31,16 @@ dependencies {
   implementation(libs.kotlinx.coroutines)
   implementation(libs.timber)
 
+  implementation(libs.dagger.hilt.android)
+  testImplementation(libs.dagger.hilt.android.testing)
+  ksp(libs.dagger.hilt.compiler)
+
+  implementation(platform(libs.androidx.compose.bom))
+  implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.foundation)
+  implementation(libs.androidx.compose.ui.tooling.prview)
+  debugImplementation(libs.androidx.compose.ui.tooling)
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
 
