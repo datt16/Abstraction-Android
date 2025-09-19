@@ -1,54 +1,21 @@
-import com.android.sdklib.AndroidVersion.VersionCodes
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-  alias(libs.plugins.android.application)
-  alias(libs.plugins.kotlin.android)
-  alias(libs.plugins.compose.compiler)
+  id("abstraction.android.application.compose")
+  id("abstraction.android.hilt")
   alias(libs.plugins.detekt)
-  alias(libs.plugins.ksp)
-  alias(libs.plugins.hilt)
-
-  kotlin(libs.plugins.kotlin.seriazation.get().pluginId) version libs.plugins.kotlin.seriazation.get().version.requiredVersion
+  alias(libs.plugins.kotlin.seriazation)
 }
 
 android {
   namespace = "io.github.datt16.abstraction"
-  compileSdk = VersionCodes.BAKLAVA
 
   defaultConfig {
     applicationId = "io.github.datt16.abstraction"
-    minSdk = VersionCodes.Q
-    targetSdk = VersionCodes.BAKLAVA
     versionCode = 29360001
     versionName = "0.1"
   }
 
-  buildTypes {
-    debug {
-      applicationIdSuffix = ".debug"
-      isDebuggable = true
-    }
-    release {
-      isMinifyEnabled = true
-      applicationIdSuffix = ".release"
-      proguardFiles(
-        getDefaultProguardFile("proguard-android-optimize.txt"),
-        "proguard-rules.pro"
-      )
-    }
-  }
   buildFeatures {
     buildConfig = true
-  }
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-  }
-  kotlin {
-    compilerOptions {
-      jvmTarget = JvmTarget.JVM_21
-    }
   }
 }
 
@@ -62,6 +29,7 @@ dependencies {
   implementation(libs.androidx.hilt.navigation.compose)
   implementation(libs.kotlinx.serialization)
   implementation(libs.kotlinx.coroutines)
+  implementation(libs.timber)
 
   implementation(libs.dagger.hilt.android)
   testImplementation(libs.dagger.hilt.android.testing)
@@ -74,8 +42,8 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.tooling)
 
   testImplementation(libs.junit)
-  implementation(libs.timber)
   androidTestImplementation(libs.androidx.junit)
+
   detektPlugins(libs.detekt.formatting)
   detektPlugins(libs.detekt.compose.rules)
 }
