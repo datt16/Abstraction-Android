@@ -1,0 +1,29 @@
+{
+    "name": "Android Development with Claude Code",
+    "build": {
+		"dockerfile": "./Dockerfile",
+		"context": ".."
+	},
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "true",
+			"username": "vscode",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/node:1": {},
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "mounts": [
+        "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+        "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
+    ],
+    "containerEnv": {
+        "NODE_OPTIONS": "--max-old-space-size=4096",
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+    },
+    "runArgs": ["--group-add=android"],
+    "remoteUser": "vscode",
+    "postCreateCommand": "sudo usermod -aG android vscode",
+    "postAttachCommand": "newgrp android"
+}
