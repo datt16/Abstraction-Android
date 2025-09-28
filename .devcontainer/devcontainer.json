@@ -1,49 +1,29 @@
 {
     "name": "Android Development with Claude Code",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
-    "runArgs": [
-        "--platform",
-        "linux/arm64"
-    ],
+    "build": {
+		"dockerfile": "./Dockerfile",
+		"context": ".."
+	},
     "features": {
-        "ghcr.io/devcontainers/features/java:1": {
-            "version": "21",
-            "installMaven": "false",
-            "installGradle": "true",
-            "jdkDistro": "tem"
-        },
-        "ghcr.io/devcontainers/features/node:1": {},
-        "ghcr.io/devcontainers-extra/features/kotlin-sdkman:2": {
-            "version": "latest",
-            "jdkVersion": "21",
-            "jdkDistro": "tem"
-        },
-        "ghcr.io/nordcominc/devcontainer-features/android-sdk:1": {
-            "platform": "36",
-            "build_tools": "36.0.0"
-        },
-        "ghcr.io/anthropics/devcontainer-features/claude-code:latest": {}
-    },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "anthropic.claude-code"
-            ],
-            "settings": {
-                "editor.formatOnSave": true
-            }
-        }
+        "ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "true",
+			"username": "vscode",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/node:1": {},
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
     },
     "mounts": [
         "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
-        "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume"
+        "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
     ],
     "containerEnv": {
         "NODE_OPTIONS": "--max-old-space-size=4096",
-        "CLAUDE_CONFIG_DIR": "/home/node/.claude"
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
     },
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
-    "workspaceFolder": "/workspace",
-    "containerUser": "vscode",
-    "remoteUser": "vscode"
+    "runArgs": ["--group-add=android"],
+    "remoteUser": "vscode",
+    "postCreateCommand": "sudo usermod -aG android vscode",
+    "postAttachCommand": "newgrp android"
 }
