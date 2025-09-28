@@ -2,7 +2,8 @@
     "name": "Android Development with Claude Code",
     "build": {
 		"dockerfile": "./Dockerfile",
-		"context": ".."
+		"context": "..",
+        "options": ["--tag=abs-android:latest"]
 	},
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {

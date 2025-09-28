@@ -6,5 +6,8 @@
     ],
     "deny": [],
     "ask": []
+  },
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "1200000"
   }
 }
