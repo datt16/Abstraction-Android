@@ -1,13 +1,14 @@
 {
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "1200000"
+  },
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(./gradlew app:compileDebugKotlin)"
     ],
     "deny": [],
     "ask": []
-  },
-  "env": {
-    "BASH_DEFAULT_TIMEOUT_MS": "1200000"
   }
 }
