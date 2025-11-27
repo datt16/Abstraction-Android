@@ -3,6 +3,7 @@ plugins {
   id("abstraction.android.hilt")
   alias(libs.plugins.detekt)
   alias(libs.plugins.kotlin.seriazation)
+  alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -16,6 +17,15 @@ android {
 
   buildFeatures {
     buildConfig = true
+  }
+
+  testOptions {
+    unitTests {
+      isIncludeAndroidResources = true
+      all {
+        it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+      }
+    }
   }
 }
 
@@ -44,6 +54,11 @@ dependencies {
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
+
+  implementation(libs.androidx.compose.ui.test.junit4)
+  debugImplementation(libs.androidx.compose.ui.test.manifest)
+  testImplementation(libs.robolectric)
+  testImplementation(libs.espresso.core)
 
   detektPlugins(libs.detekt.formatting)
   detektPlugins(libs.detekt.compose.rules)
