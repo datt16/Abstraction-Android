@@ -1,8 +1,10 @@
 package io.github.datt16.abstraction.core.designsystem
 
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 private const val LIGHT_PRIMARY_COLOR = 0xFF6200EE
 private const val LIGHT_SECONDARY_COLOR = 0xFF03DAC6

@@ -3,20 +3,30 @@ package io.github.datt16.abstraction.core.designsystem
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.platform.LocalContext
 
 val LocalAppColors = compositionLocalOf { LightColorScheme }
 val LocalAppTypography = compositionLocalOf { Typography() }
 
 @Composable
 fun AbstractionAppTheme(
+  dynamicColor: Boolean = true,
   darkTheme: Boolean = false,
   content: @Composable () -> Unit,
 ) {
-  val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+  val colorScheme = when {
+    dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
+    dynamicColor -> dynamicLightColorScheme(LocalContext.current)
+    darkTheme -> DarkColorScheme
+    else -> LightColorScheme
+  }
+
   CompositionLocalProvider(
     LocalAppColors provides colorScheme,
     LocalAppTypography provides Typography(),
