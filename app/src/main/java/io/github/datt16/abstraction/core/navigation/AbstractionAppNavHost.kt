@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.github.datt16.abstraction.screens.home.HomeScreen
+import io.github.datt16.abstraction.feature.home.HomeScreen
 
 @Composable
 fun AbstractionAppNavHost(

@@ -1,4 +1,4 @@
-package io.github.datt16.abstraction.screens.common
+package io.github.datt16.abstraction.core.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

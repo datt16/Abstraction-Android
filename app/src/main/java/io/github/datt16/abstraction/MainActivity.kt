@@ -1,4 +1,4 @@
-package io.github.datt16.abstraction.core
+package io.github.datt16.abstraction
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.datt16.abstraction.core.designsystem.AbstractionAppTheme
 import io.github.datt16.abstraction.core.navigation.AbstractionAppNavHost
-import io.github.datt16.abstraction.screens.common.AbstractionAppScaffold
+import io.github.datt16.abstraction.core.ui.AbstractionAppScaffold
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
