@@ -35,22 +35,32 @@
 
 ## プロジェクト構造
 
+MVVM + 3層アーキテクチャ（UI / Domain / Data）を採用し、画面（Feature）ごとにコードを集約しています。
+
 ```
 app/src/main/java/io/github/datt16/abstraction/
-├── core/                          # コアアプリケーションコンポーネント
-│   ├── AbstractionApplication.kt  # Hiltアプリケーションクラス
-│   ├── MainActivity.kt            # メインアクティビティ
-│   ├── designsystem/             # デザインシステム
-│   │   ├── AbstractionAppTheme.kt
-│   │   └── ColorScheme.kt
-│   ├── navigation/               # ナビゲーションシステム
-│   │   ├── AbstractionAppDestinations.kt
-│   │   └── AbstractionAppNavHost.kt
-│   └── ext/                      # 拡張関数
-├── screens/                      # UI画面とComposable
-│   ├── common/                   # 共通コンポーネント
-│   └── home/                     # ホーム画面
-└── viewmodels/                   # UI状態管理用ViewModel
+├── AbstractionApplication.kt      # Hiltアプリケーションクラス
+├── MainActivity.kt                # メインアクティビティ
+├── core/                          # アプリ全体で共有する基盤
+│   ├── designsystem/              # テーマ、カラー
+│   ├── navigation/                # ナビゲーション定義
+│   ├── ui/                        # 共通UIコンポーネント
+│   └── ext/                       # 拡張関数
+├── data/                          # データ層（アプリ全体で共有）
+│   ├── repository/                # リポジトリインターフェース・実装
+│   ├── datasource/                # データソース
+│   │   ├── local/                 # Room, DataStore等
+│   │   └── remote/                # API
+│   └── model/                     # データ層のモデル（Entity, DTO）
+├── domain/                        # ドメイン層（ビジネスロジック）
+│   ├── usecase/                   # ユースケース
+│   └── model/                     # ドメインモデル
+├── feature/                       # UI層（画面ごとに集約）
+│   └── home/                      # ホーム画面
+│       ├── HomeScreen.kt          # UI
+│       ├── HomeViewModel.kt       # 状態管理
+│       └── HomeUiState.kt         # UI状態モデル
+└── di/                            # Hiltモジュール
 ```
 
 ## ビルド設定

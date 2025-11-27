@@ -1,9 +1,8 @@
-package io.github.datt16.abstraction.viewmodels
+package io.github.datt16.abstraction.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.datt16.abstraction.screens.home.HomeUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

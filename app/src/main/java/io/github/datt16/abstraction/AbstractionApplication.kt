@@ -1,8 +1,7 @@
-package io.github.datt16.abstraction.core
+package io.github.datt16.abstraction
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import io.github.datt16.abstraction.BuildConfig
 import timber.log.Timber
 
 @HiltAndroidApp

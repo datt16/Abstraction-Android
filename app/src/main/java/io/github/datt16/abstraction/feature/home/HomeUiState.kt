@@ -1,4 +1,4 @@
-package io.github.datt16.abstraction.screens.home
+package io.github.datt16.abstraction.feature.home
 
 data class HomeUiState(
   val isLoading: Boolean,

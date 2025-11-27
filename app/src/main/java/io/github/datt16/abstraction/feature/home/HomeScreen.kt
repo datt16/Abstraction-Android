@@ -1,4 +1,4 @@
-package io.github.datt16.abstraction.screens.home
+package io.github.datt16.abstraction.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.datt16.abstraction.core.designsystem.AbstractionAppTheme
 import io.github.datt16.abstraction.core.ext.black
-import io.github.datt16.abstraction.viewmodels.HomeViewModel
 
 @Composable
 fun HomeScreen(
