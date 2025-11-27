@@ -118,7 +118,7 @@ private fun InfoRow(
   }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
   AbstractionAppTheme {

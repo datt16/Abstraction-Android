@@ -1,9 +1,25 @@
+@file:OptIn(ExperimentalRoborazziApi::class)
+
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+
 plugins {
   id("abstraction.android.application.compose")
   id("abstraction.android.hilt")
   alias(libs.plugins.detekt)
   alias(libs.plugins.kotlin.seriazation)
   alias(libs.plugins.roborazzi)
+}
+
+roborazzi {
+  generateComposePreviewRobolectricTests {
+    enable = true
+    packages = listOf("io.github.datt16.abstraction.feature")
+    robolectricConfig = mapOf(
+      "sdk" to "[36]",
+      "qualifiers" to "RobolectricDeviceQualifiers.Pixel5",
+    )
+    includePrivatePreviews = true
+  }
 }
 
 android {
@@ -13,6 +29,7 @@ android {
     applicationId = "io.github.datt16.abstraction"
     versionCode = 29360001
     versionName = "0.1"
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
   buildFeatures {
@@ -24,6 +41,7 @@ android {
       isIncludeAndroidResources = true
       all {
         it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+        it.jvmArgs("-noverify")
       }
     }
   }
@@ -59,6 +77,13 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.test.manifest)
   testImplementation(libs.robolectric)
   testImplementation(libs.espresso.core)
+
+  // TODO: テストツール定義用のモジュールをappモジュールから独立させる
+  implementation(libs.roborazzi.core)
+  implementation(libs.roborazzi.compose)
+  testImplementation(libs.roborazzi.compose.preview.scanner)
+  implementation(libs.roborazzi.junit.rule)
+  testImplementation(libs.composable.preview.scanner)
 
   detektPlugins(libs.detekt.formatting)
   detektPlugins(libs.detekt.compose.rules)

@@ -12,7 +12,7 @@ import io.github.datt16.abstraction.feature.home.HomeScreen
 import io.github.datt16.abstraction.feature.settings.SettingsScreen
 
 @Composable
-fun AbstractionAppNavHost(
+fun AbstractionAppNavContainer(
   modifier: Modifier = Modifier,
 ) {
   val backStack = rememberNavBackStack(AbstractionAppDestinations.Home)
@@ -36,7 +36,7 @@ fun AbstractionAppNavHost(
       entryProvider = { key ->
         when (key) {
           AbstractionAppDestinations.Home -> NavEntry(key) {
-            HomeScreen(sampleKey = "datt11")
+            HomeScreen()
           }
           AbstractionAppDestinations.Settings -> NavEntry(key) {
             SettingsScreen()
