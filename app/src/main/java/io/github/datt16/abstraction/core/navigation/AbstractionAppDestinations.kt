@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 object AbstractionAppDestinations {
   @Serializable
   data object Home : NavKey
+
+  @Serializable
+  data object Settings : NavKey
 }

@@ -6,7 +6,8 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(./gradlew app:compileDebugKotlin)"
+      "Bash(./gradlew app:compileDebugKotlin)",
+      "Bash(./gradlew build:*)"
     ],
     "deny": [],
     "ask": []
