@@ -27,4 +27,3 @@ abstract class ScreenshotTest {
       .captureRoboImage("build/outputs/roborazzi/$name.png")
   }
 }
-

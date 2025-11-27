@@ -14,9 +14,9 @@ class SampleScreenVrt : ScreenshotTest() {
   @Test
   fun homeScreenScreenshot() {
     captureScreenshot("homeScreenshotTest") {
-        HomeScreen(
-            viewModel = HomeViewModel()
-        )
+      HomeScreen(
+        viewModel = HomeViewModel()
+      )
     }
   }
 }

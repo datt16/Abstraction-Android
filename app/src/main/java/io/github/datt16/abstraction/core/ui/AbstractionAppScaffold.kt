@@ -22,7 +22,7 @@ import io.github.datt16.abstraction.core.navigation.AbstractionAppDestinations
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AbstractionAppScaffold(
-  currentRoute: NavKey ,
+  currentRoute: NavKey,
   onNavigate: (NavKey) -> Unit,
   modifier: Modifier = Modifier,
   content: @Composable (paddingValues: PaddingValues) -> Unit,
