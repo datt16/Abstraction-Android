@@ -3,9 +3,6 @@ package io.github.datt16.abstraction.core.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -15,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
+import io.github.datt16.abstraction.R
 import io.github.datt16.abstraction.core.designsystem.AbstractionAppTheme
 import io.github.datt16.abstraction.core.navigation.AbstractionAppDestinations
 
@@ -42,7 +41,7 @@ fun AbstractionAppScaffold(
         NavigationBarItem(
           icon = {
             Icon(
-              imageVector = Icons.Default.Home,
+              painter = painterResource(R.drawable.ic_home),
               contentDescription = "Home"
             )
           },
@@ -53,7 +52,7 @@ fun AbstractionAppScaffold(
         NavigationBarItem(
           icon = {
             Icon(
-              imageVector = Icons.Default.Settings,
+              painter = painterResource(R.drawable.ic_settings),
               contentDescription = "Settings"
             )
           },

@@ -21,10 +21,16 @@ import io.github.datt16.abstraction.core.ext.black
 fun HomeScreen(
   modifier: Modifier = Modifier,
   viewModel: HomeViewModel = hiltViewModel(),
-  sampleKey: String = "datt16",
 ) {
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+  HomeScreenContent(uiState = uiState, modifier = modifier)
+}
 
+@Composable
+private fun HomeScreenContent(
+  uiState: HomeUiState,
+  modifier: Modifier = Modifier,
+) {
   Column(
     modifier = modifier
       .fillMaxWidth()
@@ -32,7 +38,9 @@ fun HomeScreen(
   ) {
     if (uiState.isLoading) {
       Box(
-        Modifier.fillMaxWidth().padding(16.dp)
+        Modifier
+          .fillMaxWidth()
+          .padding(16.dp)
       ) {
         CircularProgressIndicator(
           modifier = Modifier.align(Alignment.Center)
@@ -41,17 +49,17 @@ fun HomeScreen(
     } else {
       Text(
         style = AbstractionAppTheme.typography.displayMedium.black(),
-        text = "Hello $sampleKey,\nThis is Home Screen",
+        text = "Hello ${uiState.username},\nThis is Home Screen",
         modifier = Modifier.fillMaxWidth()
       )
     }
   }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun HomeScreenPreview() {
+private fun HomeScreenContentPreview() {
   AbstractionAppTheme {
-    HomeScreen()
+    HomeScreenContent(uiState = HomeUiState.Dummy)
   }
 }

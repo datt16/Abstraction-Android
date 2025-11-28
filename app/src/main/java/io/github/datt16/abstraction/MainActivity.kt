@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.datt16.abstraction.core.designsystem.AbstractionAppTheme
-import io.github.datt16.abstraction.core.navigation.AbstractionAppNavHost
+import io.github.datt16.abstraction.core.navigation.AbstractionAppNavContainer
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     setContent {
       AbstractionAppTheme {
-        AbstractionAppNavHost()
+        AbstractionAppNavContainer()
       }
     }
   }
