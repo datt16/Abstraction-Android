@@ -28,6 +28,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Use CI gradle.properties
+        run: cp gradle.properties.action gradle.properties
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -106,6 +109,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Use CI gradle.properties
+        run: cp gradle.properties.action gradle.properties
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -140,6 +146,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Use CI gradle.properties
+        run: cp gradle.properties.action gradle.properties
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4

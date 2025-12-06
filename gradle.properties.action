@@ -1,0 +1,9 @@
+# CI専用 Gradle 設定ファイル
+# ローカル開発では通常の gradle.properties を使用し、CI ではワークフローでこのファイルを上書きコピーする。
+
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+
+android.useAndroidX=true
+kotlin.code.style=official
+android.nonTransitiveRClass=true
