@@ -15,7 +15,8 @@ roborazzi {
     enable = true
     packages = listOf("io.github.datt16.abstraction.feature")
     robolectricConfig = mapOf(
-      "sdk" to "[36]",
+      // Robolectricが安定対応しているAPIに固定（CIでの互換性確保）
+      "sdk" to "[34]",
       "qualifiers" to "RobolectricDeviceQualifiers.Pixel5",
     )
     includePrivatePreviews = true
@@ -73,16 +74,17 @@ dependencies {
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
 
-  implementation(libs.androidx.compose.ui.test.junit4)
+  // Compose UI テストはユニットテストで使用するため testImplementation に
+  testImplementation(libs.androidx.compose.ui.test.junit4)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
   testImplementation(libs.robolectric)
   testImplementation(libs.espresso.core)
 
   // TODO: テストツール定義用のモジュールをappモジュールから独立させる
-  implementation(libs.roborazzi.core)
-  implementation(libs.roborazzi.compose)
+  testImplementation(libs.roborazzi.core)
+  testImplementation(libs.roborazzi.compose)
   testImplementation(libs.roborazzi.compose.preview.scanner)
-  implementation(libs.roborazzi.junit.rule)
+  testImplementation(libs.roborazzi.junit.rule)
   testImplementation(libs.composable.preview.scanner)
 
   detektPlugins(libs.detekt.formatting)
